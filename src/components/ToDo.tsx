@@ -7,6 +7,7 @@ const ToDo = ({ text, category, id }: ITodo) => {
     const {
       currentTarget: { name },
     } = event;
+
     setTodos((oldToDos) => {
       const targetIndex = oldToDos.findIndex((todo) => todo.id === id);
       const newToDo = { text, id, category: name as any };
@@ -17,6 +18,10 @@ const ToDo = ({ text, category, id }: ITodo) => {
       ];
     });
   };
+  const onClickDelete = () => {
+    setTodos((oldToDos) => oldToDos.filter((todo) => todo.id !== id));
+  };
+
   return (
     <>
       <li>
@@ -36,6 +41,7 @@ const ToDo = ({ text, category, id }: ITodo) => {
             Done
           </button>
         )}
+        <button onClick={onClickDelete}>Delete</button>
       </li>
     </>
   );
