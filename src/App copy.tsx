@@ -1,6 +1,14 @@
 import React, { DragEventHandler } from 'react';
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import {
+  DragDropContext,
+  Draggable,
+  DropReason,
+  DropResult,
+  Droppable,
+} from 'react-beautiful-dnd';
+import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
+import { toDoState } from './atoms';
 
 const Wrapper = styled.div`
   display: flex;
@@ -31,10 +39,19 @@ const Card = styled.div`
   margin-bottom: 5px;
 `;
 
-const todos = ['표원식', '바보', '멍청이', '똥깨', '말미잘'];
-
 const App = () => {
-  const onDragEnd = () => {};
+  const [toDos, setTodos] = useRecoilState(toDoState);
+  const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
+    if (!destination) {
+      return;
+    }
+    setTodos((oldTodos) => {
+      const copyTodos = [...oldTodos];
+      copyTodos.splice(source.index, 1);
+      copyTodos.splice(destination?.index, 0, draggableId);
+      return oldTodos;
+    });
+  };
   return (
     <>
       <DragDropContext onDragEnd={onDragEnd}>
@@ -43,7 +60,7 @@ const App = () => {
             <Droppable droppableId={'one'}>
               {(magic) => (
                 <Border ref={magic.innerRef} {...magic.droppableProps}>
-                  {todos.map((todo, index) => (
+                  {toDos.map((todo, index) => (
                     <Draggable draggableId={todo} index={index}>
                       {(magic) => (
                         <Card
