@@ -1,70 +1,68 @@
-import React, { useState } from 'react';
-import { createGlobalStyle } from 'styled-components';
-import ToDoList from './components/ToDoList';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import styled from 'styled-components';
 
-const GlobalStyled = createGlobalStyle`
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, menu, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-main, menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font-size: 100%;
-  font: "Lato";
-  vertical-align: baseline;
-}
-
-/* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure,
-footer, header, hgroup, main, menu, nav, section {
-  display: block;
-}
-
-/* HTML5 hidden-attribute fix for newer browsers */
-*[hidden] {
-  display: none;
-}
-
-body {
-  line-height: 1;
-  font-family: 'Lato', sans-serif;
-  background-color: ${(props) => props.theme.bgColor};
-  color : ${(props) => props.theme.textColor};
-}
-
-h1 {
-  font-family: 'Lato', sans-serif; /* 제목에 대한 폰트 설정 */
-  font-size: 30px; /* 제목에 대한 글꼴 크기 설정 */
-}
-
-p {
-  font-family: 'Courier New', monospace; /* 내용에 대한 폰트 설정 */
-  font-size: 16px; /* 내용에 대한 글꼴 크기 설정 */
-}
-
-a {
-  text-decoration: none;
-  color: inherit;
-}
+const Wrapper = styled.div`
+  display: flex;
+  max-width: 480px;
+  width: 100%;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 `;
 
+const Boards = styled.div`
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(1, 1fr);
+`;
+
+const Board = styled.div`
+  padding: 20px 10px;
+  padding-top: 30px;
+  background-color: ${(props) => props.theme.boardColor};
+  border-radius: 5px;
+  min-height: 300px;
+`;
+
+const Card = styled.div`
+  background-color: ${(props) => props.theme.cardColor};
+  border-radius: 10px;
+  padding: 5px 10px;
+  margin-bottom: 5px;
+`;
+
+const todos = ['a', 'b', 'c', 'd', 'e', 'f'];
+
 const App = () => {
+  const onDragEnd = () => {};
   return (
-    <>
-      <GlobalStyled />
-      <ToDoList />
-    </>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <Wrapper>
+        <Boards>
+          <Droppable droppableId={'one'}>
+            {(magic) => (
+              <Board ref={magic.innerRef} {...magic.droppableProps}>
+                {todos.map((todo, index) => (
+                  <Draggable draggableId={todo} index={index}>
+                    {(magic) => (
+                      <Card
+                        ref={magic.innerRef}
+                        {...magic.draggableProps}
+                        {...magic.dragHandleProps}
+                      >
+                        {todo}
+                      </Card>
+                    )}
+                  </Draggable>
+                ))}
+              </Board>
+            )}
+          </Droppable>
+        </Boards>
+      </Wrapper>
+    </DragDropContext>
   );
 };
+
 export default App;
