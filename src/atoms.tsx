@@ -1,19 +1,21 @@
-import { atom, selector } from 'recoil';
+import { atom } from 'recoil';
 
 export interface ITodo {
   id: number;
   text: string;
+  isDelete: boolean;
 }
 
-interface ITodoState {
+export interface ITodoState {
   [key: string]: ITodo[];
 }
 
 export const toDoState = atom<ITodoState>({
   key: 'toDo',
-  default: {
-    'To Do': [],
-    Doing: [],
-    Done: [],
-  },
+  default: {},
+});
+
+export const isDarkAtom = atom<boolean>({
+  key: 'isDark',
+  default: true, // 초기 상태는 darkTheme
 });
