@@ -8,5 +8,7 @@ declare module 'styled-components' {
     textColor: string;
     boardtextColor: string;
     deleteBtn: string;
+    toggle: string;
+    trash: string;
   }
 }

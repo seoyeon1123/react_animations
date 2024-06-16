@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form';
 import DeleteBoard from './Component/DeleteBoard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faToggleOn, faToggleOff } from '@fortawesome/free-solid-svg-icons';
+import { Breakpoints } from './BreakPoint';
 
 const Wrapper = styled.div`
   display: flex;
@@ -17,11 +18,14 @@ const Wrapper = styled.div`
   align-items: center;
   height: 100vh;
   width: 100vh;
+  position: relative; /* Relative positioning for absolute children */
 `;
 
 const CustomFontAwesomeIcon = styled(FontAwesomeIcon)`
-  font-size: 30px;
+  font-size: 50px;
   cursor: pointer;
+  color: ${(props) => props.theme.toggle};
+  margin: 0;
 `;
 
 const Boards = styled.div`
@@ -29,14 +33,16 @@ const Boards = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: flex-start;
-  width: 100%;
 `;
 
 const FormInput = styled.div`
   display: flex;
   flex-direction: column;
-  position: fixed;
-  top: 150px;
+  position: absolute; /* Absolute positioning */
+  top: 20px; /* Adjust top position as needed */
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%); /* Center horizontally */
+  margin-top: 100px;
 `;
 
 const Title = styled.h1`
@@ -44,6 +50,7 @@ const Title = styled.h1`
   text-align: center;
   margin-bottom: 10px;
   color: ${(props) => props.theme.textColor};
+  font-family: 'Playwrite AU VIC', cursive;
 `;
 
 const Input = styled.input`
@@ -55,6 +62,10 @@ const Input = styled.input`
   outline: none;
   padding-left: 10px;
   background-color: rgb(233, 233, 233);
+
+  &::placeholder {
+    font-family: 'Gowun Batang', serif;
+  }
 `;
 
 interface IForm {
@@ -71,6 +82,9 @@ const App = () => {
   };
 
   const onValid = ({ addToDo }: IForm) => {
+    if (Object.keys(toDos).length >= 3) {
+      return;
+    }
     setTodos((allBoards) => {
       return {
         ...allBoards,
@@ -81,89 +95,86 @@ const App = () => {
   };
 
   const onDragEnd = (result: DropResult) => {
-    const { draggableId, source, destination, type } = result;
+    const { source, destination } = result;
 
     if (!destination) {
-      // destination이 null인 경우 (보드 밖으로 떨어짐)
       console.log('보드 밖으로 떨어짐');
       return;
     }
-    if (source.droppableId === destination.droppableId) {
+
+    if (destination.droppableId === 'TRASH') {
       setTodos((allBoard) => {
         const copySource = [...allBoard[source.droppableId]];
-        const taskObj = copySource[source.index];
-
         copySource.splice(source.index, 1);
-        copySource.splice(destination.index, 0, taskObj);
 
         return {
           ...allBoard,
           [source.droppableId]: copySource,
         };
       });
-      console.log('같은 보드에서 움직임');
-    }
-
-    if (source.droppableId !== destination.droppableId) {
-      // setTodos((allBoard) => {
-      //   const copySource = [...allBoard[source.droppableId]];
-      //   const copyDestination = [...allBoard[destination.droppableId]];
-      //   const taskObj = copySource[source.index];
-
-      //   copySource.splice(source.index, 1);
-      //   copyDestination.splice(destination.index, 0, taskObj);
-
-      //   return {
-      //     ...allBoard,
-      //     [source.droppableId]: copySource,
-      //     [destination.droppableId]: copyDestination,
-      //   };
-      // });
-      console.log('다른 보드로 이동함');
-    }
-
-    // TRASH 영역으로 드롭된 경우의 처리 로직
-    if (type === 'TRASH' && destination.droppableId === 'TRASH') {
-      // setTodos((allBoard) => {
-      //   const copySource = [...allBoard[source.droppableId]];
-      //   copySource.splice(source.index, 1);
-
-      //   return {
-      //     ...allBoard,
-      //     [source.droppableId]: copySource,
-      //   };
-      // });
       console.log('Trash로 이동함');
+      return;
     }
+
+    setTodos((allBoard) => {
+      const sourceBoard = [...allBoard[source.droppableId]];
+      const destinationBoard = [...allBoard[destination.droppableId]];
+
+      if (source.droppableId === destination.droppableId) {
+        const taskObj = sourceBoard[source.index];
+
+        sourceBoard.splice(source.index, 1);
+        sourceBoard.splice(destination.index, 0, taskObj);
+
+        return {
+          ...allBoard,
+          [source.droppableId]: sourceBoard,
+        };
+      } else {
+        const taskObj = sourceBoard[source.index];
+
+        sourceBoard.splice(source.index, 1);
+        destinationBoard.splice(destination.index, 0, taskObj);
+
+        return {
+          ...allBoard,
+          [source.droppableId]: sourceBoard,
+          [destination.droppableId]: destinationBoard,
+        };
+      }
+    });
+    console.log('보드 이동 완료');
   };
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <CustomFontAwesomeIcon
-        onClick={toggleTheme}
-        icon={isToggled ? faToggleOn : faToggleOff}
-      />
-      <Wrapper>
-        <FormInput>
-          <Title>오늘의 할 일 ?</Title>
-          <form onSubmit={handleSubmit(onValid)}>
-            <Input
-              {...register('addToDo', {
-                required: true,
-              })}
-              placeholder="Create New Board"
-            />
-          </form>
-        </FormInput>
+    <>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <CustomFontAwesomeIcon
+          onClick={toggleTheme}
+          icon={isToggled ? faToggleOn : faToggleOff}
+        />
+        <Wrapper>
+          <FormInput>
+            <Title>What To Do Today?</Title>
+            <form onSubmit={handleSubmit(onValid)}>
+              <Input
+                {...register('addToDo', {
+                  required: true,
+                })}
+                placeholder="Create New Board"
+              />
+            </form>
+          </FormInput>
 
-        <Boards>
-          {Object.keys(toDos).map((boardId) => (
-            <Board key={boardId} boardId={boardId} toDos={toDos[boardId]} />
-          ))}
-        </Boards>
-        <DeleteBoard />
-      </Wrapper>
-    </DragDropContext>
+          <Boards>
+            {Object.keys(toDos).map((boardId) => (
+              <Board key={boardId} boardId={boardId} toDos={toDos[boardId]} />
+            ))}
+          </Boards>
+          <DeleteBoard />
+        </Wrapper>
+      </DragDropContext>
+    </>
   );
 };
 

@@ -1,28 +1,34 @@
-import React from 'react';
 import { Droppable } from 'react-beautiful-dnd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
-
-const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
-  font-size: 50px;
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  cursor: pointer;
-`;
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
 
 const Container = styled.div`
-  width: 300px;
-  height: auto;
+  width: 80px;
+  height: 80px;
+  /* Set relative positioning */
+  position: fixed; /* Set fixed positioning */
+  right: 20px; /* Distance from the right edge of the viewport */
+  bottom: 20px; /* Distance from the bottom edge of the viewport */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const IconWrapper = styled.div`
+  font-size: 80px; /* Adjust size as needed */
+  color: ${(props) => props.theme.trash}; /* Change icon color */
+  position: fixed;
 `;
 
 const DeleteBoard = () => {
   return (
-    <Droppable droppableId="TRASH" type="TRASH">
+    <Droppable droppableId="TRASH">
       {(provided) => (
         <Container ref={provided.innerRef} {...provided.droppableProps}>
-          <StyledFontAwesomeIcon icon={faTrashAlt} />
+          <IconWrapper>
+            <FontAwesomeIcon icon={faTrashCan} />
+          </IconWrapper>
           {provided.placeholder}
         </Container>
       )}

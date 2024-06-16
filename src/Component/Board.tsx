@@ -5,7 +5,6 @@ import Card from './Card';
 import { useForm } from 'react-hook-form';
 import { useSetRecoilState } from 'recoil';
 import { ITodo } from '../atoms';
-import { useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus } from '@fortawesome/free-solid-svg-icons';
 
@@ -19,6 +18,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  font-family: 'Gowun Batang', serif;
 `;
 
 const Title = styled.h2`
@@ -58,7 +58,7 @@ const Input = styled.input`
   text-align: center;
   border-style: none;
   background-color: '#DC8686';
-  border-bottom: 1px solid #ad88c6;
+
   height: 30px;
 
   width: 30px;
@@ -67,6 +67,10 @@ const Input = styled.input`
   }
   &:focus {
     outline: none;
+  }
+
+  &::placeholder {
+    font-family: 'Gowun Batang', serif;
   }
 `;
 
@@ -104,6 +108,11 @@ const Board = ({ boardId, toDos }: IBoardProps) => {
       text: toDo,
       isDelete: false,
     };
+
+    if (Object.keys(toDos).length >= 8) {
+      return;
+    }
+
     setToDos((allBoards) => {
       return {
         ...allBoards,
