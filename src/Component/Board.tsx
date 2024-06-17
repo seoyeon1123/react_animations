@@ -100,7 +100,7 @@ interface IForm {
 }
 const Board = ({ boardId, toDos }: IBoardProps) => {
   const setToDos = useSetRecoilState(toDoState);
-  const { register, handleSubmit, setValue } = useForm();
+  const { register, handleSubmit, setValue } = useForm<IForm>();
 
   const onValid = ({ toDo }: IForm) => {
     const newTodo = {

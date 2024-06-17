@@ -8,7 +8,6 @@ import { useForm } from 'react-hook-form';
 import DeleteBoard from './Component/DeleteBoard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faToggleOn, faToggleOff } from '@fortawesome/free-solid-svg-icons';
-import { Breakpoints } from './BreakPoint';
 
 const Wrapper = styled.div`
   display: flex;
@@ -74,7 +73,7 @@ interface IForm {
 
 const App = () => {
   const [toDos, setTodos] = useRecoilState(toDoState);
-  const { register, handleSubmit, setValue } = useForm();
+  const { register, handleSubmit, setValue } = useForm<IForm>();
   const [isToggled, setIsToggled] = useRecoilState(isDarkAtom);
 
   const toggleTheme = () => {

@@ -74,10 +74,10 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const ThemedApp = () => {
-  const isDark = useRecoilValue(isDarkAtom);
+  const isLight = useRecoilValue(isDarkAtom);
 
   return (
-    <ThemeProvider theme={isDark ? lightTheme : darkTheme}>
+    <ThemeProvider theme={isLight ? lightTheme : darkTheme}>
       <GlobalStyle />
       <App />
     </ThemeProvider>
