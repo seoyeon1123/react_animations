@@ -9,6 +9,15 @@ import DeleteBoard from './Component/DeleteBoard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faToggleOn, faToggleOff } from '@fortawesome/free-solid-svg-icons';
 
+const Header = styled.header`
+  height: 60px;
+  width: 100%;
+  background-color: ${(props) => props.theme.boardColor};
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -24,8 +33,9 @@ const CustomFontAwesomeIcon = styled(FontAwesomeIcon)`
   font-size: 50px;
   cursor: pointer;
   color: ${(props) => props.theme.toggle};
-  position: fixed;
   margin: 0;
+  z-index: 1;
+  margin-left: 10px;
 `;
 
 const Boards = styled.div`
@@ -81,6 +91,8 @@ const App = () => {
     setIsToggled((prev) => !prev);
   };
 
+  // const nowDate = Date.now();
+
   const onValid = ({ addToDo }: IForm) => {
     if (Object.keys(toDos).length >= 3) {
       return;
@@ -115,7 +127,6 @@ const App = () => {
       console.log('Trash로 이동함');
       return;
     }
-
     setTodos((allBoard) => {
       const sourceBoard = [...allBoard[source.droppableId]];
       const destinationBoard = [...allBoard[destination.droppableId]];
@@ -149,10 +160,13 @@ const App = () => {
   return (
     <>
       <DragDropContext onDragEnd={onDragEnd}>
-        <CustomFontAwesomeIcon
-          onClick={toggleTheme}
-          icon={isToggled ? faToggleOn : faToggleOff}
-        />
+        <Header>
+          <CustomFontAwesomeIcon
+            onClick={toggleTheme}
+            icon={isToggled ? faToggleOn : faToggleOff}
+          />
+        </Header>
+
         <Wrapper>
           <FormInput>
             <Title>What To Do Today?</Title>

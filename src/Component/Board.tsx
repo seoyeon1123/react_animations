@@ -109,7 +109,7 @@ const Board = ({ boardId, toDos }: IBoardProps) => {
       isDelete: false,
     };
 
-    if (Object.keys(toDos).length >= 8) {
+    if (toDos.length >= 8) {
       return;
     }
 
@@ -151,15 +151,16 @@ const Board = ({ boardId, toDos }: IBoardProps) => {
               isDraggingOver={info.isDraggingOver}
               isDraggingFromThis={Boolean(info.draggingFromThisWith)}
             >
-              {toDos.map((toDo, index) => (
-                <Card
-                  boardId={boardId}
-                  key={toDo.id}
-                  index={index}
-                  toDoText={toDo.text}
-                  toDoId={toDo.id}
-                ></Card>
-              ))}
+              {Array.isArray(toDos) &&
+                toDos.map((toDo, index) => (
+                  <Card
+                    boardId={boardId}
+                    key={toDo.id}
+                    index={index}
+                    toDoText={toDo.text}
+                    toDoId={toDo.id}
+                  />
+                ))}
               {magic.placeholder}
             </Area>
           )}

@@ -7,7 +7,7 @@ export const lightTheme: DefaultTheme = {
   textColor: '#254336',
   boardtextColor: 'white',
   deleteBtn: 'white',
-  toggle: '#254336',
+  toggle: '#F1E5D1',
   trash: '#254336',
 };
 
@@ -18,6 +18,6 @@ export const darkTheme: DefaultTheme = {
   textColor: '#F1E5D1',
   boardtextColor: 'black',
   deleteBtn: '#254336',
-  toggle: 'white',
+  toggle: '#254336',
   trash: '#F1E5D1',
 };
