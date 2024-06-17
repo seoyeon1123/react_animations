@@ -3,8 +3,7 @@ import { Draggable } from 'react-beautiful-dnd';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
-
-import Modal from './Modal';
+import ModalEdit from './ModalEdit';
 
 const CardTodos = styled.div<ICardTodosProps>`
   display: flex;
@@ -63,7 +62,7 @@ const Card = ({ toDoText, toDoId, index, boardId }: ICardProps) => {
             <FontAwesomeIcon icon={faPenToSquare} onClick={onClickEdit} />
           )}
           {isEditOpen && (
-            <Modal
+            <ModalEdit
               toDoText={toDoText}
               toDoId={toDoId}
               boardId={boardId}

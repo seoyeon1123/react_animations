@@ -17,13 +17,14 @@ const Wrapper = styled.div`
   align-items: center;
   height: 100vh;
   width: 100vh;
-  position: relative; /* Relative positioning for absolute children */
+  position: relative;
 `;
 
 const CustomFontAwesomeIcon = styled(FontAwesomeIcon)`
   font-size: 50px;
   cursor: pointer;
   color: ${(props) => props.theme.toggle};
+  position: fixed;
   margin: 0;
 `;
 
@@ -37,10 +38,10 @@ const Boards = styled.div`
 const FormInput = styled.div`
   display: flex;
   flex-direction: column;
-  position: absolute; /* Absolute positioning */
-  top: 20px; /* Adjust top position as needed */
-  left: 50%; /* Center horizontally */
-  transform: translateX(-50%); /* Center horizontally */
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
   margin-top: 100px;
 `;
 

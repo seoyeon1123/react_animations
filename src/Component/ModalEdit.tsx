@@ -50,7 +50,7 @@ interface IModal {
   onClose: () => void;
 }
 
-const Modal = ({ toDoText, toDoId, boardId, onClose }: IModal) => {
+const ModalEdit = ({ toDoText, toDoId, boardId, onClose }: IModal) => {
   const [inputValue, setValue] = useState(toDoText);
   const setTodos = useSetRecoilState(toDoState);
 
@@ -91,4 +91,4 @@ const Modal = ({ toDoText, toDoId, boardId, onClose }: IModal) => {
   );
 };
 
-export default Modal;
+export default ModalEdit;
