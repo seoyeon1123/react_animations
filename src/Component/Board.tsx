@@ -153,6 +153,7 @@ const Board = ({ boardId, toDos }: IBoardProps) => {
             >
               {toDos.map((toDo, index) => (
                 <Card
+                  boardId={boardId}
                   key={toDo.id}
                   index={index}
                   toDoText={toDo.text}
