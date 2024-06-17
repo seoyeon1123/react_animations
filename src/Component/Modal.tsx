@@ -16,12 +16,11 @@ const Input = styled.input`
 interface IModal {
   toDoText: string;
   toDoId: number;
-  index: number;
   boardId: string;
   onClose: () => void;
 }
 
-const Modal = ({ toDoText, toDoId, index, boardId, onClose }: IModal) => {
+const Modal = ({ toDoText, toDoId, boardId, onClose }: IModal) => {
   const [inputValue, setValue] = useState(toDoText);
   const setTodos = useSetRecoilState(toDoState);
 
@@ -34,12 +33,10 @@ const Modal = ({ toDoText, toDoId, index, boardId, onClose }: IModal) => {
     const newTodos = inputValue;
     if (newTodos !== null && newTodos.trim() !== '') {
       setTodos((allBoards) => {
-        // 이전 상태(prevTodos)를 바탕으로 새로운 상태를 업데이트합니다.
         const updatedTodos = allBoards[boardId].map((todo) =>
           todo.id === toDoId ? { ...todo, text: newTodos } : todo
         );
 
-        // 업데이트된 할 일 목록을 새로운 객체로 반환합니다.
         return {
           ...allBoards,
           [boardId]: updatedTodos,

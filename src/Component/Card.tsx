@@ -3,8 +3,7 @@ import { Draggable } from 'react-beautiful-dnd';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { toDoState } from '../atoms';
+
 import Modal from './Modal';
 
 const CardTodos = styled.div<ICardTodosProps>`
@@ -29,24 +28,23 @@ interface ICardTodosProps {
 }
 
 const Card = ({ toDoText, toDoId, index, boardId }: ICardProps) => {
-  const setTodos = useSetRecoilState(toDoState);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditOpen, setisEditOpen] = useState(false);
   const [isIconVisible, setIsIconVisible] = useState(true);
 
-  const openModal = () => {
-    setIsModalOpen(true);
+  const openEdit = () => {
+    setisEditOpen(true);
     setIsIconVisible(false);
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
+  const closeEdit = () => {
+    setisEditOpen(false);
     setIsIconVisible(true);
   };
 
   const onClickEdit = (e: React.MouseEvent) => {
     e.preventDefault();
 
-    openModal();
+    openEdit();
   };
 
   return (
@@ -64,13 +62,12 @@ const Card = ({ toDoText, toDoId, index, boardId }: ICardProps) => {
           {isIconVisible && (
             <FontAwesomeIcon icon={faPenToSquare} onClick={onClickEdit} />
           )}
-          {isModalOpen && (
+          {isEditOpen && (
             <Modal
               toDoText={toDoText}
               toDoId={toDoId}
-              index={index}
               boardId={boardId}
-              onClose={closeModal}
+              onClose={closeEdit}
             />
           )}
         </CardTodos>
