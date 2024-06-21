@@ -1,11 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import { RecoilRoot, useRecoilValue } from 'recoil'; // useRecoilValue 추가
-import { darkTheme, lightTheme } from './theme';
-import { ThemeProvider } from 'styled-components';
+import { RecoilRoot } from 'recoil';
 import { createGlobalStyle } from 'styled-components';
-import { isDarkAtom } from './atoms';
 
 const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap');
@@ -63,31 +60,23 @@ const GlobalStyle = createGlobalStyle`
   body {
     font-weight: 300;
     font-family: "Playwrite AU VIC", cursive, "Gowun Batang", serif;
-    background-color: ${(props) => props.theme.bgColor};
-    color: ${(props) => props.theme.textColor};
     line-height: 1.2;
+    color:black;
+    line-height: 1.2;
+    background-image: linear-gradient(to top, #ff0844 0%, #ffb199 100%);
   }
+  
   a {
     text-decoration: none;
     color: inherit;
   }
 `;
 
-const ThemedApp = () => {
-  const isLight = useRecoilValue(isDarkAtom);
-
-  return (
-    <ThemeProvider theme={isLight ? lightTheme : darkTheme}>
-      <GlobalStyle />
-      <App />
-    </ThemeProvider>
-  );
-};
-
 ReactDOM.render(
   <React.StrictMode>
     <RecoilRoot>
-      <ThemedApp />
+      <GlobalStyle />
+      <App />
     </RecoilRoot>
   </React.StrictMode>,
   document.getElementById('root')
