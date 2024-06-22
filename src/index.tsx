@@ -1,12 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App copy';
+import App from './App';
 import { RecoilRoot } from 'recoil';
 import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
-  @import url('https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap');
-  @import url('https://fonts.googleapis.com/css2?family=Playwrite+AU+VIC:wght@100..400&display=swap');
+ @import url('https://fonts.googleapis.com/css2?family=Hi+Melody&display=swap');
   html, body, div, span, applet, object, iframe,
   h1, h2, h3, h4, h5, h6, p, blockquote, pre,
   a, abbr, acronym, address, big, cite, code,
@@ -58,12 +57,11 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
   body {
-    font-weight: 300;
-    font-family: "Playwrite AU VIC", cursive, "Gowun Batang", serif;
+    font-family: "Hi Melody", sans-serif;
+    font-weight: 400;
+    font-style: normal;
     line-height: 1.2;
     color:black;
-    line-height: 1.2;
-    background-image: linear-gradient(to top, #ff0844 0%, #ffb199 100%);
   }
   
   a {

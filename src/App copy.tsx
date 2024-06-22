@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import 표원식Image from './표원식.jpeg'; // 이미지 파일 경로를 import
 
 const Wrapper = styled.div`
+  font-family: 'Hi Melody', sans-serif;
   width: 100vw;
   height: 100vh;
   background-color: lightpink;
@@ -22,6 +23,7 @@ const Button = styled.button`
   border: none;
   border-radius: 8px;
   cursor: pointer;
+  font-family: 'Hi Melody', sans-serif;
 `;
 
 const Modal = styled(motion.div)`
@@ -37,7 +39,7 @@ const Modal = styled(motion.div)`
 
 const H2 = styled.h2`
   font-size: 20px;
-  font-family: 'Gowun Batang', serif;
+  font-family: 'Hi Melody', sans-serif;
 `;
 
 const CloseButton = styled.button`
@@ -83,9 +85,25 @@ const OptionButton = styled.button`
   }
 `;
 
+const CorrectModal = styled(motion.div)`
+  width: 250px;
+  height: 100px;
+  background-color: wheat;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000; // Ensuring this is higher than other elements
+  padding-top: 15%;
+`;
 const App = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [quizAnswered, setQuizAnswered] = useState(false);
+  const [correctOpen, setCorrectOpen] = useState(false);
+  const [message, setMessage] = useState('');
 
   const openModal = () => {
     setModalOpen(true);
@@ -94,6 +112,10 @@ const App = () => {
 
   const closeModal = () => {
     setModalOpen(false);
+  };
+
+  const closeCorrectModal = () => {
+    setCorrectOpen(false);
   };
 
   const modalVariants = {
@@ -110,13 +132,17 @@ const App = () => {
     },
   };
 
+  const correctVariants = {
+    start: { opacity: 0 },
+    end: { opacity: 1, transition: { duration: 0.5, type: 'spring' } },
+    exit: { opacity: 0 },
+  };
+
   const handleOptionClick = (isCorrect: boolean) => {
-    if (isCorrect) {
-      alert('정답! 우리는 천생연분임!');
-    } else {
-      alert('땡 우ㅜ우우우우우.');
-    }
-    setQuizAnswered(true);
+    setCorrectOpen(true);
+    setMessage(
+      isCorrect ? '정답! 우리는 천생연분~' : '땡!!!!!!!!!!! 우우우우우우'
+    );
   };
 
   return (
@@ -148,6 +174,17 @@ const App = () => {
               <OptionButton onClick={() => handleOptionClick(false)}>
                 베이글
               </OptionButton>
+              {correctOpen && (
+                <CorrectModal
+                  variants={correctVariants}
+                  initial="start"
+                  animate="end"
+                  exit="exit"
+                >
+                  {message}
+                  <CloseButton onClick={closeCorrectModal}>닫기</CloseButton>
+                </CorrectModal>
+              )}
             </QuizContainer>
           </Modal>
         )}
