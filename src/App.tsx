@@ -33,11 +33,27 @@ const App = () => {
     setShowing((prev) => !prev);
   };
 
+  const boxVariants = {
+    initial: { opacity: 0, scale: 0 },
+    animate: { opacity: 1, scale: 1, rotateZ: 360 },
+    leaving: { opacity: 0, scale: 0, y: 50 },
+  };
+
   return (
     <>
       <Wrapper>
         <button onClick={toggleShowing}>Click Me</button>
-        {showing && <Box />}
+        <AnimatePresence>
+          {' '}
+          {showing && (
+            <Box
+              variants={boxVariants}
+              initial="initial"
+              animate="animate"
+              exit="leaving"
+            />
+          )}
+        </AnimatePresence>
       </Wrapper>
     </>
   );
