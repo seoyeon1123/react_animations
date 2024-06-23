@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
-import 표원식Image from './표원식.jpeg'; // 이미지 파일 경로를 import
+import { motion, AnimatePresence } from 'framer-motion';
+
+import img1 from './img/KakaoTalk_Photo_2024-06-23-15-27-49 001.jpeg';
+import img2 from './img/KakaoTalk_Photo_2024-06-23-15-27-49 002.jpeg';
+import img3 from './img/KakaoTalk_Photo_2024-06-23-15-27-49 003.jpeg';
+import img4 from './img/KakaoTalk_Photo_2024-06-23-15-27-50 004.jpeg';
+import img5 from './img/KakaoTalk_Photo_2024-06-23-15-27-50 005.jpeg';
+import img6 from './img/KakaoTalk_Photo_2024-06-23-15-27-50 006.jpeg';
 
 const Wrapper = styled.div`
   font-family: 'Hi Melody', sans-serif;
@@ -9,50 +15,38 @@ const Wrapper = styled.div`
   height: 100vh;
   background-color: lightpink;
   display: flex;
-  justify-content: center;
+  flex-direction: column; /* 세로 방향으로 요소들을 정렬합니다. */
+  justify-content: space-between;
   align-items: center;
-  position: relative;
-  text-align: center;
 `;
 
-const Button = styled.button`
-  font-size: 20px;
-  padding: 10px 20px;
-  background-color: #ff6b6b;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-family: 'Hi Melody', sans-serif;
-`;
-
-const Modal = styled(motion.div)`
+const Box = styled(motion.div)`
   width: 400px;
-  max-width: 90vw;
-  max-height: 90vh;
   background-color: white;
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
-  position: relative;
-`;
-
-const H2 = styled.h2`
-  font-size: 20px;
-  font-family: 'Hi Melody', sans-serif;
-`;
-
-const CloseButton = styled.button`
   position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 16px;
-  padding: 8px 16px;
-  background-color: #ff6b6b;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
+  top: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Button = styled.button`
+  background-color: white;
+  font-size: 20px;
+  border-radius: 5px;
+  border: 1px solid lightpink;
+  margin: 30px 0;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:focus {
+    background-color: rgba(255, 255, 255, 0.5);
+  }
 `;
 
 const Image = styled.img`
@@ -61,134 +55,49 @@ const Image = styled.img`
   margin-top: 20px;
 `;
 
-const ModalContainer = styled.div`
-  position: absolute;
-`;
+const imgList = [img1, img2, img3, img4, img5, img6];
 
-const QuizContainer = styled.div`
-  margin-top: 20px;
-`;
+const box = {
+  start: (back: boolean) => ({ x: back ? -800 : 800, opacity: 0, scale: 0 }),
+  center: {
+    x: 0,
+    opacity: 1,
+    scale: 1,
+  },
+  end: (back: boolean) => ({ x: back ? 800 : -800, opacity: 0, scale: 0 }),
+};
 
-const OptionButton = styled.button`
-  margin-top: 10px;
-  margin-right: 10px;
-  padding: 8px 16px;
-  font-size: 16px;
-  background-color: #f66b82;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #feafbc;
-  }
-`;
-
-const CorrectModal = styled(motion.div)`
-  width: 250px;
-  height: 100px;
-  background-color: wheat;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1000; // Ensuring this is higher than other elements
-  padding-top: 15%;
-`;
 const App = () => {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [quizAnswered, setQuizAnswered] = useState(false);
-  const [correctOpen, setCorrectOpen] = useState(false);
-  const [message, setMessage] = useState('');
+  const [visiable, setVisiable] = useState(0);
+  const [back, setBack] = useState(false);
 
-  const openModal = () => {
-    setModalOpen(true);
-    setQuizAnswered(false);
+  const nextBtn = () => {
+    setVisiable((prev) => (prev === imgList.length - 1 ? 0 : prev + 1));
+    setBack(false);
   };
 
-  const closeModal = () => {
-    setModalOpen(false);
+  const prevBtn = () => {
+    setVisiable((prev) => (prev === 0 ? imgList.length - 1 : prev - 1));
+    setBack(true);
   };
-
-  const closeCorrectModal = () => {
-    setCorrectOpen(false);
-  };
-
-  const modalVariants = {
-    start: { scale: 0, opacity: 0 },
-    end: {
-      scale: 1,
-      opacity: 1,
-      transition: { duration: 0.5, type: 'spring' },
-    },
-    exit: {
-      scale: 0,
-      opacity: 0,
-      transition: { duration: 0.5, type: 'spring' },
-    },
-  };
-
-  const correctVariants = {
-    start: { opacity: 0 },
-    end: { opacity: 1, transition: { duration: 0.5, type: 'spring' } },
-    exit: { opacity: 0 },
-  };
-
-  const handleOptionClick = (isCorrect: boolean) => {
-    setCorrectOpen(true);
-    setMessage(
-      isCorrect ? '정답! 우리는 천생연분~' : '땡!!!!!!!!!!! 우우우우우우'
-    );
-  };
-
   return (
     <Wrapper>
-      <Button onClick={openModal}>Click Me</Button>
-
-      <ModalContainer>
-        {modalOpen && (
-          <Modal
-            variants={modalVariants}
-            initial="start"
-            animate="end"
-            exit="exit"
-          >
-            <CloseButton onClick={closeModal}>닫기</CloseButton>
-            <H2>💪🏻득근하자 </H2>
-            <Image src={표원식Image} alt="표원식" />
-            <QuizContainer>
-              <h3>서연이가 먹고 싶은 음식은? </h3>
-              <OptionButton onClick={() => handleOptionClick(true)}>
-                떡볶이
-              </OptionButton>
-              <OptionButton onClick={() => handleOptionClick(false)}>
-                곱창
-              </OptionButton>
-              <OptionButton onClick={() => handleOptionClick(false)}>
-                면
-              </OptionButton>
-              <OptionButton onClick={() => handleOptionClick(false)}>
-                베이글
-              </OptionButton>
-              {correctOpen && (
-                <CorrectModal
-                  variants={correctVariants}
-                  initial="start"
-                  animate="end"
-                  exit="exit"
-                >
-                  {message}
-                  <CloseButton onClick={closeCorrectModal}>닫기</CloseButton>
-                </CorrectModal>
-              )}
-            </QuizContainer>
-          </Modal>
-        )}
-      </ModalContainer>
+      <AnimatePresence custom={back}>
+        <Box
+          custom={back}
+          variants={box}
+          initial="start"
+          animate="center"
+          exit="end"
+          key={visiable}
+        >
+          <Image src={imgList[visiable]} alt={`Image ${visiable + 1}`} />
+        </Box>
+      </AnimatePresence>
+      <div>
+        <Button onClick={nextBtn}>Next</Button>
+        <Button onClick={prevBtn}>Prev</Button>
+      </div>
     </Wrapper>
   );
 };
